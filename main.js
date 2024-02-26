@@ -1,6 +1,9 @@
 function printObject(json) {
-    const changeJson = JSON.parse(json)
-    console.log(changeJson)
+    try {
+        const changeJson = JSON.parse(json)
+        console.log(changeJson)
+    } catch (error) {
+        console.log('Не удалось получить JSON из значения: ' + json);
+    }
 }
-console.log('{"myKey": 42}')
-printObject('{"myKey": 42}')
+printObject({myKey: 42})
