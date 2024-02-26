@@ -1,13 +1,44 @@
 function printObject(json, arr) {
-    try {
-        const changeJson = JSON.parse(json)
-        const newArr = arr.reduce((acc, key) => {
-            acc[key] = changeJson[key]
-            return acc
-        }, {})
-        console.log(newArr)
-    } catch (error) {
-        console.log('Не удалось получить JSON из значения: ' + json);
+        const changeJson = JSON.parse(json);
+    if (typeof changeJson !== 'object' || Array.isArray(changeJson)) {
+        throw new Error('Результат обработки JSON не является объектом.');
+    }
+
+    if (arr) {
+        const selectedKeys = {};
+        arr.forEach(key => {
+            if (key in changeJson) {
+                selectedKeys[key] = changeJson[key];
+            } else {
+                throw new Error(`Ключ "${key}" отсутствует в объекте.`);
+            }
+        });
+        console.log(selectedKeys);
+    } else {
+        console.log(changeJson);
     }
 }
-printObject('{"name": "Нуржан", "age": 20, "city": "Бишкек"}', ['name', 'city'])
+
+try {
+    printObject('["это", "массив", "а не объект"]');
+} catch (error) {
+    console.error(error.message);
+}
+
+try {
+    printObject('"а это строка"');
+} catch (error) {
+    console.error(error.message);
+}
+
+try {
+    printObject('42');
+} catch (error) {
+    console.error(error.message);
+}
+
+try {
+    printObject('{"name": "Айбек", "age": 31}', ['name', 'city']);
+} catch (error) {
+    console.error(error.message);
+}
