@@ -1,44 +1,27 @@
-function printObject(json, arr) {
-        const changeJson = JSON.parse(json);
-    if (typeof changeJson !== 'object' || Array.isArray(changeJson)) {
-        throw new Error('Результат обработки JSON не является объектом.');
-    }
-
-    if (arr) {
-        const selectedKeys = {};
-        arr.forEach(key => {
-            if (key in changeJson) {
-                selectedKeys[key] = changeJson[key];
-            } else {
-                throw new Error(`Ключ "${key}" отсутствует в объекте.`);
-            }
-        });
-        console.log(selectedKeys);
+function myFunction() {
+    const random = Math.random();
+    if (random < 0.5) {
+        return 'Успешный результат';
     } else {
-        console.log(changeJson);
+        throw new Error('Ошибка: функция завершилась неудачно');
     }
 }
 
-try {
-    printObject('["это", "массив", "а не объект"]');
-} catch (error) {
-    console.error(error.message);
-}
+const delayPromise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        try {
+            const result = myFunction();
+            resolve(result);
+        } catch (error) {
+            reject(error);
+        }
+    }, 1000);
+});
 
-try {
-    printObject('"а это строка"');
-} catch (error) {
-    console.error(error.message);
-}
-
-try {
-    printObject('42');
-} catch (error) {
-    console.error(error.message);
-}
-
-try {
-    printObject('{"name": "Айбек", "age": 31}', ['name', 'city']);
-} catch (error) {
-    console.error(error.message);
-}
+delayPromise
+    .then(result => {
+        console.log(result);
+    })
+    .catch(error => {
+        console.error(error.message);
+    });
